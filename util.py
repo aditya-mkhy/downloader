@@ -107,7 +107,7 @@ def fpath(path):
             tPath += w
             
     return tPath
+
     
 if __name__ == "__main__":
-
     print(is_online())

@@ -1,21 +1,24 @@
 import os
-from util import get_downloadpath, time_cal, data_size_cal, log, fpath, is_online, Status
+from util import get_downloadpath, time_cal, data_size_cal, log, fpath, is_online, Status, AdaptiveChunk
 import time
 import requests
 import queue
 from threading import Thread, Timer
+from urllib.parse import unquote
 
-class Down:
+
+class Downloader:
     def __init__(self) -> None:
         #path to save the file
         self.save_path = get_downloadpath()
 
         # chunk size
         self.chunk = 8485
+        self.adaptive_chunk = AdaptiveChunk(min_chunk=8485, max_chunk= 1024 * 1024)
 
 
     def remove_symbol_from_filename(self, filename: str):
-        return filename.replace("%20", " ")
+        return unquote(filename).replace(":", "-").replace("|", "_")
     
     def find_path_from(self, headers=None, url=None):
         if headers:
@@ -88,7 +91,7 @@ class Down:
 
         if os.path.exists(file_path):
             # resuming from prevoius download
-            from_byte = os.stat(fpath).st_size
+            from_byte = os.stat(file_path).st_size
 
             log(f"File Already exists. Trying to resume it from {data_size_cal(from_byte)}")
             headers["Range"] = f"bytes={from_byte}-"
@@ -133,7 +136,6 @@ class Down:
             log(f"status_code ==> {response.status_code}")
             # print(f"coockies==> {response.cookies.items()}")
             # print(f"Header==> {response.headers}")
-
             content_length = int(response.headers["Content-Length"])
 
             # save file
@@ -148,6 +150,7 @@ class Down:
                     log("Maximum trial ended... now cancelling this file..")
                     return "Error"
                 
+                time.sleep(2)
                 log(f"Trying again.. trial number : {trial}")
                 return self.direct_download(url=url, trial=trial + 1)
             
@@ -212,7 +215,7 @@ class Down:
                 status.progress_thr.start()
 
                 for chunk in response.iter_content(self.chunk):
-                    if chunk: # filter out keep-alive new chunks
+                    if chunk is not None: # filter out keep-alive new chunks
                         status.data_queue.put(chunk)
                         status.downloaded_length += len(chunk)
 
@@ -223,6 +226,7 @@ class Down:
             print("File is closed for good...")
             if status.downloaded_length == status.content_length:
                 log(f"***** File Downloaded Success& size={data_size_cal(status.downloaded_length)} ************")
+                log(f"File Downloaded : {file_path}")
                 return True
             
             else:
@@ -249,7 +253,8 @@ class Down:
 
         # saving the current downloaded_length to prev_length
         status.prev_length = downloaded_length
-        per_sec_size = (downloaded_length - prev_length) //2
+        delta = max(1, downloaded_length - prev_length)
+        per_sec_size = delta // 2
 
         try:
             timest = f"{time_cal((content_length - downloaded_length) // per_sec_size)} left"
@@ -263,7 +268,7 @@ class Down:
 
     def download(self, url: list):
         if isinstance(url, str):
-            urls = [urls]
+            urls = [url]
 
         elif isinstance(url, list):
             urls = url
@@ -280,7 +285,7 @@ class Down:
 
         
 if __name__  == "__main__":
-    down = Down()
+    down = Downloader()
     
     urls = [
         "https://worker-mute-frost-7a43.cemeso9920.workers.dev/696bd82969437f67d69658e661e1156a8c22a2c12ef2d69affb33198907b52aa78e88adc9c72059ecab0a5a3b66a3336011395b9789625cc2c0284a12229757f3a353b5600acc2df6efff5324356ecad79e82f23ed4df7746460adcd7d12bed930f831d7fc75c49be286f5e683810ca8d105abab7b735ec8da068a9157e86e1789e1dba5b835338e9a6a370345c00d7c1aa6699701d4078ef3cc8aea5d2a3742fa41c06de2ea0561902d35cd4a926a54::2044f41c3b4a0b4fe66784604b11acfe/Lamborghini%20%20The%20Man%20Behind%20the%20Legend%20(2022)%201080p%20BluRay%20[Hindi%20DDP%202.0%20%20English%20DTS%205.1]%20x264%20(HDSUHDMovies).mkv"
