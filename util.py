@@ -6,6 +6,7 @@ import queue
 from threading import Thread
 import socket
 
+
 class Status:
     def __init__(self):
         self.content_length = 0
@@ -51,15 +52,6 @@ def log(*args):
     print(f"INFO [{datetime.now().strftime('%d-%m-%Y  %H:%M:%S')}] { ' '.join(args)}")
 
 
-def resource_path(relative_path):
-    path=os.path.dirname(sys.executable)    
-    return path+'/'+relative_path
-
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
-
 def is_online():
     try:
         s  = socket.socket()
@@ -69,7 +61,6 @@ def is_online():
         return True
     except:
         return False
-
 
 
 def time_cal(sec):
@@ -83,68 +74,29 @@ def time_cal(sec):
         return f"{sec//216000}:{ str(sec%216000)[:2]} Days"
     else:
         return "CE"
-
-   
+    
+     
 def data_size_cal(size):
-    st=None
     if size < 1024:
-        st=f'{size} Bytes'
+        return f'{size} Bytes'
         
     elif size < 1022976 :
-        size=str(size/1024).split('.')
-        size=size[0]+'.'+(size[1])[:1]
-        st=f'{size} KB'
+        return f"{size / 1024:.1f} KB"
 
     elif size < 1048576 :
-        size=str(size/1048576).split('.')
-        size=size[0]+'.'+(size[1])[:2]
-        st=f'{size} MB'
+        return f"{size / 1048576:.2f} MB"
 
     elif size < 1047527424:
-        
-        size=str(size/1048576).split('.')
-        size=size[0]+'.'+(size[1])[:1]
-        st=f'{size} MB'
+        return f"{size / 1048576:.1f} MB"
         
     elif size < 1073741824:
-        
-        size=str(size/1073741824).split('.')
-        size=size[0]+'.'+(size[1])[:2]
-        st=f'{size} GB'
+        return f"{size / 1073741824:.2f} GB"
         
     elif size >= 1073741824:
-        size=str(size/1073741824).split('.')
-        size=size[0]+'.'+(size[1])[:1]
-        st=f'{size} GB'
+        return f"{size / 1073741824:.1f} GB"
     else:
-        st='Error_in_cal'
-    return st
+        return "Calculation Error"
 
-
-def getdate(pt=None):
-    if pt == None:
-        pt = time.time()
-    ct  = time.time()
-    dayDif = ct-pt
-    dayNum =  dayDif//86400
-
-    if dayNum < 1:
-        return "Today"
-
-    elif dayNum < 2:
-        return "Yesterday" 
-
-    elif dayNum < 7:
-        return datetime.fromtimestamp(pt).strftime("%A")# return week days like sunday, monday
-
-    else: 
-        return f'{datetime.fromtimestamp(pt).strftime("%d %b %Y")}'
-
-
-def getTime(t=None):
-    if t == None:
-        return datetime.now().strftime("%I:%M %p").lower()
-    return datetime.fromtimestamp(t).strftime("%I:%M %p").lower()
     
 def fpath(path):
     tPath = ""
