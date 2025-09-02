@@ -15,7 +15,7 @@ class Status:
         self._stop = False
         self.data_queue = queue.Queue()
         self.write_thr: Thread = None
-        self.progress_thr: Thread = None
+        # self.progress_thr: Thread = None
         
     @property
     def stop(self):
@@ -26,7 +26,7 @@ class Status:
         self._stop = value
 
         if value == True:
-            print("Sttoping thread...")
+            print("Stoping thread...")
             try:
                 print("joining write_tthread....")
                 self.write_thr.join()
@@ -34,19 +34,19 @@ class Status:
             except:
                 pass
 
-            try:
-                print("Joining the progress_thr.......")
-                self.progress_thr.join()
-                print("joinded...")
-            except:
-                pass
+            # try:
+            #     print("Joining the progress_thr.......")
+            #     self.progress_thr.join()
+            #     print("joinded...")
+            # except:
+            #     pass
 
             print("end of the ... the process  stop vartiable.....")
 
 
 
 def get_downloadpath() -> str:
-    return f"{Path.home()}\\Downloads\\"
+    return f"{Path.home()}\\Downloads"
 
 def log(*args):
     print(f"INFO [{datetime.now().strftime('%d-%m-%Y  %H:%M:%S')}] { ' '.join(args)}")
@@ -81,7 +81,7 @@ def data_size_cal(size):
         return f'{size} Bytes'
         
     elif size < 1022976 :
-        return f"{size / 1024:.1f} KB"
+        return f"{size / 1024:.0f} KB"
 
     elif size < 1048576 :
         return f"{size / 1048576:.2f} MB"
@@ -110,4 +110,7 @@ def fpath(path):
 
     
 if __name__ == "__main__":
-    print(is_online())
+
+    size = 1024 * 1024 * 10 + (1024 * 100)
+    info = data_size_cal(size)
+    print(info)
