@@ -58,18 +58,46 @@ def delete(file_path: str,  data: str):
         log(f"ErrorInOpeningFile : {e}")
         return
     
+class Link:
+    def __init__(self):
+        self.file_path = "./link.txt"
+
+    def get_link(self) -> str:
+        # reading data from file
+        with open(self.file_path, "r") as ff:
+            data = ff.read()
+
+        # file is empty
+        if len(data) == 0:
+            return
+        
+        # getting index of the new_line chr.. to get the first url
+        indx = data.find("\n")
+        if indx != -1:
+            url = data[:indx].strip()
+        
+        else:
+            #
+            url = data.strip()
+            data = ""
+        
+        # writing the data after removing the first url
+        with open(self.file_path, "w") as tf:
+            tf.write(data[indx + 1:])
+
+        return url
+
+
+    
   
 if __name__ == "__main__":
 
-    my_str = ["my name is aditya",   'love you']
+    # my_str = ["my name is aditya",   'love you']
 
-    file_path = os.path.abspath(__file__)
+    # file_path = os.path.abspath(__file__)
 
-    delete(file_path=file_path, data=my_str[1])
+    # delete(file_path=file_path, data=my_str[1])
+    lnk = Link()
 
-    
-
-    
-
-
-    
+    url = lnk.get_link()
+    print(f"Link ==> {url}")

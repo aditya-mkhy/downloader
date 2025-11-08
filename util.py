@@ -29,7 +29,8 @@ class Status:
             print("Stoping thread...")
             try:
                 print("joining write_tthread....")
-                self.write_thr.join()
+                if self.write_thr:
+                    self.write_thr.join()
                 print("joined...")
             except:
                 pass
