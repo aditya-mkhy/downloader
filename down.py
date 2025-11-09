@@ -4,7 +4,7 @@ import time
 import requests
 from threading import Thread, Timer
 from urllib.parse import unquote
-from delete import delete, Link
+from link import Link
 
 
 
@@ -13,6 +13,7 @@ class Downloader:
         #path to save the file
         self.save_path = get_downloadpath()
         self.del_link = del_link
+        self.link = Link()
 
         # chunk size 8485
         self.chunk = 8485
@@ -120,8 +121,7 @@ class Downloader:
                     response.close()
 
                     if self.del_link:
-                        this_file_path = os.path.abspath(__file__)
-                        delete(file_path=this_file_path, data=url)
+                        self.link.remove_link(url=url)
                     
                     return True
 
@@ -183,8 +183,7 @@ class Downloader:
                 log(f"File Alredy Dowloaded  link-> {file_path}")
 
                 if self.del_link:
-                    this_file_path = os.path.abspath(__file__)
-                    delete(file_path=this_file_path, data=url)
+                    self.link.remove_link(url=url)
                 return True
             
             else:
@@ -244,8 +243,7 @@ class Downloader:
                 log(f"File Downloaded : {file_path}")
 
                 if self.del_link:
-                    this_file_path = os.path.abspath(__file__)
-                    delete(file_path=this_file_path, data=url)
+                    self.link.remove_link(url=url)
                 return True
             
             else:
@@ -303,8 +301,6 @@ class Downloader:
             self.direct_download(url=url, trial=1)
 
     def run(self):
-        self.del_link = False
-        self.link = Link()
 
         while True:
             url = self.link.get_link()
@@ -318,6 +314,6 @@ class Downloader:
 
 
 if __name__  == "__main__":
-    down = Downloader()
+    down = Downloader(del_link=True)
     down.save_path = "D:\\Downloads"
     down.run()
