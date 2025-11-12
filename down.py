@@ -6,15 +6,12 @@ from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
 
-
-
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
         #path to save the file
         self.save_path = get_downloadpath()
         self.del_link = del_link
         self.link = Link()
-
         # chunk size 8485
         self.chunk = 8485
 
@@ -33,13 +30,11 @@ class Downloader:
                     if indx2 > 0:
                         fileName = txt[ : indx2]
                         fileName = self.remove_symbol_from_filename(fileName)
-
-                        # print(f"Paths:ContentDisciption : {fileName}")
                         return fileName
+                    
             except Exception as e:
-                print(f"Failed to find the path from hearder : {e}")
-        
-        
+                log(f"Failed to find the path from hearder : {e}")
+
 
         if url:
             try:
@@ -51,11 +46,9 @@ class Downloader:
 
                 path, ext = os.path.splitext(fileName)
                 if ext in popExt:
-                    # print(f"Paths:Urls : {fileName}")
                     return fileName
                 
                 else:
-                    # print(f"Sepecific File Format is Not Found...{fileName}")
                     if ext  != "":
                         return fileName
                     
@@ -63,7 +56,7 @@ class Downloader:
                         return False
                     
             except Exception as e:
-                print(f"Failed to find path from url : {e}")
+                log(f"Failed to find path from url : {e}")
             
         return False
     
@@ -165,8 +158,8 @@ class Downloader:
 
         else:
             log(f"Error[11]: Status_Code==> {response.status_code}")
-            print(f"coockies==> {response.cookies.items()}")
-            print(f"Header==> {response.headers}")
+            # print(f"coockies==> {response.cookies.items()}")
+            # print(f"Header==> {response.headers}")
             if response.status_code == 403 or response.status_code == 503:
                 log("The download quota for this file has been exceeded....")
                 time.sleep(2)
@@ -195,13 +188,13 @@ class Downloader:
         while True:
             data = status.data_queue.get()
             if data is None:
-                print("error[08]: data is none")
+                log("error[08]: data is none")
                 break
             # write data
             tf.write(data)
 
             if status.stop and status.data_queue.empty():
-                print("info[001] : Stopping the writing...")
+                log("info[001] : Stopping the writing...")
                 break
 
     def save(self, url, response, file_path, content_length, from_byte):
@@ -234,10 +227,10 @@ class Downloader:
                         status.downloaded_length += len(chunk)
 
                 status.stop = True
-                print("Chunk block is ended...")
+                log("Chunk block is ended...")
 
 
-            print("File is closed for good...")
+            log("File is closed for good...")
             if status.downloaded_length == status.content_length:
                 log(f"***** File Downloaded Success& size={data_size_cal(status.downloaded_length)} ************")
                 log(f"File Downloaded : {file_path}")
@@ -255,8 +248,6 @@ class Downloader:
 
             log(f"Error[005] in saving file --> {e}")
             return False
-        
-
 
     def update_progress(self, status: Status):
         if status.stop == True:
@@ -289,15 +280,11 @@ class Downloader:
 
         elif isinstance(url, list):
             urls = url
-
         else:
             raise TypeError("Url must be a string or list of strings")
-        
 
         for url in urls:
             log(f"Getting Link : {url}")
-            
-            #download
             self.direct_download(url=url, trial=1)
 
     def run(self):

@@ -1,6 +1,5 @@
 import time
 from datetime import datetime
-import os, sys
 from pathlib import Path
 import queue
 from threading import Thread
