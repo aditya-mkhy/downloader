@@ -1,5 +1,5 @@
 import os
-from util import get_downloadpath, time_cal, data_size_cal, log, fpath, is_online, Status
+from util import get_downloadpath, time_cal, data_size_cal, log, is_online, Status
 import time
 import requests
 from threading import Thread, Timer

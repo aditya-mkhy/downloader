@@ -4,6 +4,7 @@ from pathlib import Path
 import queue
 from threading import Thread
 import socket
+import os
 
 
 class Status:
@@ -36,7 +37,7 @@ class Status:
 
 
 def get_downloadpath() -> str:
-    return f"{Path.home()}\\Downloads"
+    return os.path.join(Path.home(), "Downloads")
 
 def log(*args, **kwargs):
     print(f"INFO [{datetime.now().strftime('%d-%m-%Y  %H:%M:%S')}] ", *args, **kwargs)
@@ -87,16 +88,6 @@ def data_size_cal(size):
     else:
         return "Calculation Error"
 
-    
-def fpath(path):
-    tPath = ""
-    for w in path:
-        if w == "/":
-            tPath += "\\"
-        else:
-            tPath += w
-            
-    return tPath
 
     
 if __name__ == "__main__":
