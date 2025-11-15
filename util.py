@@ -34,22 +34,12 @@ class Status:
             except:
                 pass
 
-            # try:
-            #     print("Joining the progress_thr.......")
-            #     self.progress_thr.join()
-            #     print("joinded...")
-            # except:
-            #     pass
-
-            print("end of the ... the process  stop vartiable.....")
-
-
 
 def get_downloadpath() -> str:
     return f"{Path.home()}\\Downloads"
 
-def log(*args):
-    print(f"INFO [{datetime.now().strftime('%d-%m-%Y  %H:%M:%S')}] { ' '.join(args)}")
+def log(*args, **kwargs):
+    print(f"INFO [{datetime.now().strftime('%d-%m-%Y  %H:%M:%S')}] ", *args, **kwargs)
 
 
 def is_online():

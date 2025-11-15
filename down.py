@@ -270,7 +270,7 @@ class Downloader:
             timest = "Cal.."
 
         speed = f"({data_size_cal(downloaded_length)} of {data_size_cal(content_length)} , {data_size_cal(per_sec_size)}/Sec)"
-        print(f"  {speed}   {timest}                          ", end='\r')
+        log(f"  {speed}   {timest}                          ", end='\r')
 
 
 
