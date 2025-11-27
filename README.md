@@ -119,12 +119,14 @@ dl.run()
 - `down.py` — core logic, handles streaming, retries, resuming, and headers.  
 - `delete.py` — parses and rewrites `link.txt` for link removal.  
 - `util.py` — helper functions for time, size, connection, and logs.
+
 <br>
 
 ## 🪄 License
 
 This project is licensed under the **MIT License**.  
 Feel free to use, modify, and share it.
+
 <br>
 
 ## ⚡ Credits
