@@ -302,5 +302,5 @@ class Downloader:
 
 if __name__  == "__main__":
     down = Downloader(del_link=True)
-    down.save_path = "D:\\Downloads"
+    down.save_path = "C:\\Users\\noral\\Downloads"
     down.run()
