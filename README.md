@@ -11,19 +11,19 @@ It reads links from a `link.txt` file and manages each download intelligently.
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 <br>
 
-## 🚀 Features
+## Features
 
-- ✅ **Resume broken downloads** — continues from where it left off.  
-- 📄 **Reads links from `link.txt`** — no need to manually enter URLs every time.  
-- 🔁 **Auto cleanup** — removes completed links from the list if enabled.  
-- 🧠 **File name detection** — automatically extracts filename from headers or URLs.  
-- 📦 **Chunked download system** — saves in parts and merges efficiently.  
-- 📶 **Connection check** — automatically verifies internet before downloading.  
-- 🕒 **Time & data tracking** — logs size, speed, and elapsed time.  
-- ⚡ **Lightweight multithreaded design** — uses `Thread` for write operations.  
+-  **Resume broken downloads** — continues from where it left off.  
+-  **Reads links from `link.txt`** — no need to manually enter URLs every time.  
+-  **Auto cleanup** — removes completed links from the list if enabled.  
+-  **File name detection** — automatically extracts filename from headers or URLs.  
+-  **Chunked download system** — saves in parts and merges efficiently.  
+-  **Connection check** — automatically verifies internet before downloading.  
+-  **Time & data tracking** — logs size, speed, and elapsed time.  
+-  **Lightweight multithreaded design** — uses `Thread` for write operations.  
 <br>
 
-## 📂 Project structure
+## Project structure
 
 ```
 downloader/
@@ -36,7 +36,7 @@ downloader/
 ```
 <br>
 
-## 🧩 Requirements
+## Requirements
 
 - Python **3.8 or newer**
 - Libraries:
@@ -45,7 +45,7 @@ downloader/
   ```
 <br>
 
-## 🧠 How It Works
+## How It Works
 
 1. Add one or more download URLs into `link.txt`, one per line:
    ```
@@ -67,7 +67,7 @@ downloader/
 4. Once download completes (if `del_link=True` is set), the tool removes that link from `link.txt`.
 <br>
 
-## ⚙️ Usage Example
+## Usage Example
 
 ### Basic
 
@@ -83,7 +83,7 @@ dl.run()
 ```
 <br>
 
-## 🧰 Utilities
+## Utilities
 
 ### util.py includes:
 - `get_downloadpath()` → Auto returns system Downloads folder  
@@ -93,13 +93,13 @@ dl.run()
 - `log()` → Timestamps log output  
 <br>
 
-## 🧹 Auto-cleanup system
+## Auto-cleanup system
 
 - Each completed link is **removed** from `link.txt` using `delete.py`.
 - If any line is invalid or already deleted, the tool skips gracefully.
 <br>
 
-## 💡 Tips
+## Tips
 
 - You can close the app anytime; when reopened, it will resume unfinished downloads.
 - Works great for large files (ISO, MP4, ZIP, etc.).
@@ -107,14 +107,14 @@ dl.run()
 - If a link requires renewal, replace it in `link.txt` with the new one — the downloader will continue the same partial file.
 <br>
 
-## 🔐 Safety Notes
+## Safety Notes
 
 - The tool **never executes** or opens downloaded files — only saves them.  
 - No remote code, subprocess, or hidden execution is performed.
 - You can inspect logs printed in console for detailed progress.
 <br>
 
-## 🧑‍💻 Developer Notes
+## Developer Notes
 
 - `down.py` — core logic, handles streaming, retries, resuming, and headers.  
 - `delete.py` — parses and rewrites `link.txt` for link removal.  
@@ -122,14 +122,14 @@ dl.run()
 
 <br>
 
-## 🪄 License
+## License
 
 This project is licensed under the **MIT License**.  
 Feel free to use, modify, and share it.
 
 <br>
 
-## ⚡ Credits
+## Credits
 
 Created to fix the everyday pain of interrupted downloads.  
 Developed with ❤️ in Python.
