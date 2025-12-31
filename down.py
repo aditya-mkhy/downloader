@@ -15,7 +15,6 @@ class Downloader:
         # chunk size 8485
         self.chunk = 8485
 
-
     def remove_symbol_from_filename(self, filename: str):
         return unquote(filename).replace(":", "-").replace("|", "_")
     
@@ -302,5 +301,5 @@ class Downloader:
 
 if __name__  == "__main__":
     down = Downloader(del_link=True)
-    down.save_path = "C:\\Users\\noral\\Downloads"
+    down.save_path = "D:\\Downloads"
     down.run()
