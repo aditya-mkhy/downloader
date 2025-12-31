@@ -5,15 +5,37 @@ import requests
 from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
+from watcher import ClipboardWatcher
 
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
         #path to save the file
         self.save_path = get_downloadpath()
         self.del_link = del_link
+
+        # get the link from file...
         self.link = Link()
+
+        # to get the copy link...
+        watcher = ClipboardWatcher(self.on_copy)
+        watcher.start() # run or thread
+
         # chunk size 8485
         self.chunk = 8485
+
+    def on_copy(self, data):
+        if not isinstance(data, str):
+            # data is not string
+            # a link is always string
+            return
+        
+        text = data.strip()
+        if not text:
+            return
+        
+        
+        print("Text copied:", data)
+
 
     def remove_symbol_from_filename(self, filename: str):
         return unquote(filename).replace(":", "-").replace("|", "_")

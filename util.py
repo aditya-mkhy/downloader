@@ -5,12 +5,14 @@ import queue
 from threading import Thread
 import socket
 import os
+from urllib.parse import urlparse
 
-import winsound
-
-def play_ack_sound():
-    winsound.Beep(1200, 120)  
-    winsound.Beep(900, 100)
+def is_valid_url(text: str) -> bool:
+    try:
+        result = urlparse(text)
+        return all([result.scheme in ("http", "https"), result.netloc])
+    except Exception:
+        return False
 
 
 class Status:
