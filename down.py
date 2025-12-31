@@ -39,9 +39,12 @@ class Downloader:
             return
 
         print("Url copied:", text)
+        # save link to link.txt
+        status = self.link.add_link(text)
 
-        # play acknowledgment sound to notify user
-        play_ack_sound()
+        if status:
+            # play acknowledgment sound to notify user
+            play_ack_sound()
 
 
     def remove_symbol_from_filename(self, filename: str):

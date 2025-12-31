@@ -17,6 +17,29 @@ class Link:
     
         return self._get_down_url(data)
     
+    def is_exists(self, url: str) -> bool:
+        try:
+            with open(self.file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip() == url:
+                        return True
+        except FileNotFoundError:
+            return False
+    
+    def add_link(self, url: str) -> bool:
+        # check if already in file
+        if self.is_exists(url):
+            return False
+        
+        try:
+            with open(self.file_path, "a", encoding="utf-8") as tf:
+                tf.write(url + "\n")
+                return True
+            
+        except Exception as e:
+            print(f"Error [add_link] : {e}")
+
+    
     def remove_link(self, url: str):
         new_file_data = ''
         is_replaced = False
@@ -82,24 +105,14 @@ class Link:
                 return
             
             data = data[indx + 1:]
-                
-            
 
-
-
-
-    
   
 if __name__ == "__main__":
-
-    # my_str = ["my name is aditya",   'love you']
-
-    # file_path = os.path.abspath(__file__)
-
-    # delete(file_path=file_path, data=my_str[1])
     lnk = Link()
 
     url = lnk.get_link()
     print(f"Link ==> {url}")
 
     lnk.remove_link(url)
+    lnk.add_link("https://www.amazon.in/")
+    # lnk.add_link("https://www.linkedin.com/feed/")
