@@ -6,6 +6,12 @@ from threading import Thread
 import socket
 import os
 
+import winsound
+
+def play_ack_sound():
+    winsound.Beep(1200, 120)  
+    winsound.Beep(900, 100)
+
 
 class Status:
     def __init__(self):
