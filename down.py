@@ -6,6 +6,7 @@ from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
 from watcher import ClipboardWatcher
+from util import is_valid_url
 
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
@@ -33,8 +34,11 @@ class Downloader:
         if not text:
             return
         
-        
-        print("Text copied:", data)
+        if not is_valid_url(text):
+            # not a valid url...
+            return
+
+        print("Url copied:", text)
 
 
     def remove_symbol_from_filename(self, filename: str):
