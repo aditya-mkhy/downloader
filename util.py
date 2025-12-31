@@ -12,6 +12,8 @@ def play_ack_sound():
     winsound.Beep(1200, 120)  
     winsound.Beep(900, 100)
 
+def play_duplicate_ack_sound():
+    winsound.MessageBeep(winsound.MB_ICONHAND)
 
 def is_valid_url(text: str) -> bool:
     try:

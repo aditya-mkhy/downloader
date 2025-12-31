@@ -6,7 +6,7 @@ from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
 from watcher import ClipboardWatcher
-from util import is_valid_url, play_ack_sound
+from util import is_valid_url, play_ack_sound, play_duplicate_ack_sound
 
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
@@ -38,13 +38,18 @@ class Downloader:
             # not a valid url...
             return
 
-        print("Url copied:", text)
         # save link to link.txt
         status = self.link.add_link(text)
 
         if status:
             # play acknowledgment sound to notify user
+            print("Url copied : ", text)
             play_ack_sound()
+
+        else:
+            # play when link already exists
+            print("Url Already Exists : ", text)
+            play_duplicate_ack_sound()
 
 
     def remove_symbol_from_filename(self, filename: str):
