@@ -6,7 +6,7 @@ from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
 from watcher import ClipboardWatcher
-from util import is_valid_url
+from util import is_valid_url, play_ack_sound
 
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
@@ -39,6 +39,9 @@ class Downloader:
             return
 
         print("Url copied:", text)
+
+        # play acknowledgment sound to notify user
+        play_ack_sound()
 
 
     def remove_symbol_from_filename(self, filename: str):
