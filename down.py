@@ -171,7 +171,17 @@ class Downloader:
             log(f"status_code ==> {response.status_code}")
             # print(f"coockies==> {response.cookies.items()}")
             # print(f"Header==> {response.headers}")
-            content_length = int(response.headers["Content-Length"])
+            try:
+                content_length = int(response.headers["Content-Length"])
+            except KeyError:
+                print("Error : \"Content-Length\" is not in header...")
+                print("Maybe this url is broken")
+
+                # remove link to prevent futher error
+                if self.del_link:
+                    self.link.remove_link(url=url)
+
+                return False
 
             # save file
             status = self.save(url=url, response=response, file_path=file_path, content_length=content_length, from_byte=from_byte)
