@@ -44,11 +44,20 @@ class ClipboardWatcher(Thread):
     def _on_clipboard_change(self):
         try:
             win32clipboard.OpenClipboard()
-            data = win32clipboard.GetClipboardData()
+
+            # Only react if text exists
+            if win32clipboard.IsClipboardFormatAvailable(win32con.CF_UNICODETEXT):
+                text = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+                self.callback(text)
+                
             win32clipboard.CloseClipboard()
-            self.callback(data)
+
         except Exception:
-            pass
+            try:
+                win32clipboard.CloseClipboard()
+            except:
+                pass
+
 
     def stop(self):
         if self.hwnd:
