@@ -7,11 +7,18 @@ from urllib.parse import unquote
 from link import Link
 from watcher import ClipboardWatcher
 from util import is_valid_url, play_ack_sound, play_duplicate_ack_sound
+import re
+import os
+import re
+import shutil
+
+SERIES_PATTERN = re.compile(r"S(?P<season>\d+)E(?P<episode>\d+)", re.IGNORECASE)
 
 class Downloader:
     def __init__(self, del_link: bool = False) -> None:
         #path to save the file
         self.save_path = get_downloadpath()
+        self.web_series_path = self.save_path
         self.del_link = del_link
 
         # get the link from file...
@@ -21,6 +28,7 @@ class Downloader:
         watcher = ClipboardWatcher(self.on_copy)
         watcher.start() # run or thread
 
+        print("Downloading...")
         # chunk size 8485
         self.chunk = 8485
 
@@ -95,9 +103,37 @@ class Downloader:
                 log(f"Failed to find path from url : {e}")
             
         return False
-    
 
+
+    def clean_title(self, raw_title: str) -> str:
+        title = raw_title.replace(".", " ")
+        title = re.sub(r"\s+", " ", title)  # remove double spaces
+        return title.strip()
+
+    def web_series_path_extractor(self, file_path: str):
         
+        filename = os.path.basename(file_path)
+
+        match = SERIES_PATTERN.search(filename)
+        if not match:
+            return
+
+        season_num = int(match.group("season"))  # removes leading zero
+
+        # everything BEFORE SxxExx
+        raw_title = filename[:match.start()]
+        series_name = self.clean_title(raw_title)
+
+        series_dir = os.path.join(self.web_series_path, series_name)
+        season_dir = os.path.join(series_dir, f"Season {season_num}")
+
+        os.makedirs(season_dir, exist_ok=True)
+
+        dest_path = os.path.join(season_dir, filename)
+
+        return dest_path
+
+
     def direct_download(self, url :str, trial = 1):
 
         filename = self.find_path_from(url=url)
@@ -112,9 +148,17 @@ class Downloader:
             if not filename:
                 log(f"filename is also not found in header... error")
                 return "Error"
+            
+        # check if it is web series...
 
-        file_path = f"{self.save_path}\\{filename}"
-        log(f"FilePath : {file_path}")
+        file_path = self.web_series_path_extractor(filename)
+        if not file_path:
+            file_path = f"{self.save_path}\\{filename}"
+            log(f"FilePath : {file_path}")
+
+        else:
+            log(f"WebSeriesFile Path : {file_path}")
+        
         
         from_byte = 0
         headers = {}
@@ -349,4 +393,5 @@ class Downloader:
 if __name__  == "__main__":
     down = Downloader(del_link=True)
     down.save_path = "D:\\Downloads"
+    down.web_series_path = "D:\\WebSeries"
     down.run()
