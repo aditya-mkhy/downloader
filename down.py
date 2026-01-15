@@ -28,7 +28,6 @@ class Downloader:
         watcher = ClipboardWatcher(self.on_copy)
         watcher.start() # run or thread
 
-        print("Downloading...")
         # chunk size 8485
         self.chunk = 8485
 
