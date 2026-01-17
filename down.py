@@ -27,6 +27,7 @@ class Downloader:
         # to get the copy link...
         watcher = ClipboardWatcher(self.on_copy)
         watcher.start() # run or thread
+        watcher.join()
 
         # chunk size 8485
         self.chunk = 8485
