@@ -6,6 +6,7 @@ from threading import Thread, Timer
 from urllib.parse import unquote
 from link import Link
 from watcher import ClipboardWatcher
+
 from util import is_valid_url, play_ack_sound, play_duplicate_ack_sound
 import re
 import os
@@ -27,7 +28,7 @@ class Downloader:
         # to get the copy link...
         watcher = ClipboardWatcher(self.on_copy)
         watcher.start() # run or thread
-        watcher.join()
+        # watcher.join()
 
         # chunk size 8485
         self.chunk = 8485
@@ -209,12 +210,13 @@ class Downloader:
 
                     if n ==  "n" or n== "N" or n == "NO" or n == "No" or n == "no":
                         exit()
-                    log("Restarting the download..ignoring the previous download..")
+                    log("Restarting the download.. ignoring the previous download..")
 
 
             log(f"status_code ==> {response.status_code}")
             # print(f"coockies==> {response.cookies.items()}")
             # print(f"Header==> {response.headers}")
+            
             try:
                 content_length = int(response.headers["Content-Length"])
             except KeyError:
@@ -378,6 +380,7 @@ class Downloader:
             self.direct_download(url=url, trial=1)
 
     def run(self):
+        os.makedirs(self.save_path, exist_ok=True)
 
         while True:
             url = self.link.get_link()
@@ -392,6 +395,7 @@ class Downloader:
 
 if __name__  == "__main__":
     down = Downloader(del_link=True)
-    down.save_path = "D:\\Downloads"
-    down.web_series_path = "D:\\WebSeries"
+    down.save_path = "E:\\Movies"
+    down.web_series_path = "E:\\WebSeries"
     down.run()
+    #https://worker-round-band-2caf.lotigi5232.workers.dev/840f28885aef11a151d2d04558400b6268cec8598cf50549c052e419b01ebe1c005f108372787fbf8e2fecd58d8d761bf5caa2b563c09c93cff8ba543cba24d1cfe11eeea36633e078cd8b0d1bf4e46993ebfe88f2e9142ad0f04e772da0cfd367524f6c74a550bf71f533d708af060b11698e74ee9f00abe927f7840467a7687e2fa31c3b4111548bfddf0c9e78a79e84fa885fd1db9274bda285c13b99db8ff8555e5758dbdd31a00b86e46c582e35::2f4aa27f27dc1f6bfb36afc7a4032ef3/Riverdale%20(2017)%20Season%2002%20S02%20(1080p%20BluRay%20x265%20HEVC%2010bit%20DTS%205.1%20Qman)%20[UTR].zip

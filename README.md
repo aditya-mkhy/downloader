@@ -41,7 +41,7 @@ downloader/
 - Python **3.8 or newer**
 - Libraries:
   ```bash
-  pip install requests
+  pip install -r requirements.txt
   ```
 <br>
 
